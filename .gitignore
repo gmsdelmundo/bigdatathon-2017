@@ -3,3 +3,6 @@
 /.idea
 pip-selfcheck.json
 .vscode
+selenium/
+share/
+include/
