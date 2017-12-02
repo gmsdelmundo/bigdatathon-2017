@@ -24,20 +24,28 @@ import re
 import urllib
 
 class Twitter:
-    def __init__(self, user, tweet, retweet_count, reply_count, like_count):
+    def __init__(self, user, tweet, retweet_count, reply_count, like_count, timestamp):
         self.user = user
         self.tweet = tweet
         self.retweet_count = retweet_count
         self.reply_count = reply_count
         self.like_count = like_count
+        self.timestamp = timestamp
 
 with open(args.input_file_path[0]) as json_data:
     data = json.load(json_data)
 
-entries = [Twitter(tweet['user'], tweet['text'], tweet['retweets'], tweet['replies'], tweet['likes']) for tweet in data]
+entries = [Twitter(tweet['user'], tweet['text'], tweet['retweets'], tweet['replies'], tweet['likes'], tweet['timestamp']) for tweet in data]
 
 if args.num_entries > -1:
     entries = entries[:args.num_entries]
+
+class Processed:
+    def __init__(self, userid, content, content_type, timestamp):
+        self.userid = userid
+        self.content = content
+        self.content_type = content_type
+        self.timestamp = timestamp
 
 # Bios
 bios = []
@@ -46,9 +54,9 @@ for entry in entries:
         url = "https://twitter.com/" + entry.user
         f = urllib.urlopen(url)
         page = f.read()
-        bios.append([entry.user, re.search('<p class=\"ProfileHeaderCard-bio u-dir\" dir=\"ltr\">(.*)</p>', page).group(1), 'bio'])
+        bios.append(Processed(entry.user, re.search('<p class=\"ProfileHeaderCard-bio u-dir\" dir=\"ltr\">(.*)</p>', page).group(1), 'bio', entry.timestamp))
     except:
-        bios.append([entry.user, '', 'bio'])
+        bios.append(Processed(entry.user, '', 'bio', entry.timestamp))
 
 # Tweets
 tweets = []
@@ -56,10 +64,10 @@ retweet_counts = []
 reply_counts = []
 like_counts = []
 for entry in entries:
-    tweets.append([entry.user, entry.tweet, 'tweet'])
-    retweet_counts.append([entry.user, entry.retweet_count, 'retweet count'])
-    reply_counts.append([entry.user, entry.reply_count, 'reply count'])
-    like_counts.append([entry.user, entry.like_count, 'like count'])
+    tweets.append(Processed(entry.user, entry.tweet, 'tweet', entry.timestamp))
+    retweet_counts.append(Processed(entry.user, entry.retweet_count, 'retweet count', entry.timestamp))
+    reply_counts.append(Processed(entry.user, entry.reply_count, 'reply count', entry.timestamp))
+    like_counts.append(Processed(entry.user, entry.like_count, 'like count', entry.timestamp))
 
 if args.debug:
     print 'Bios'
@@ -101,4 +109,4 @@ else:
         print 'Outputting to file'
     for arr in arrs:
         for el in arr:
-            print el[0] + ',' + el[1] + ',' + el[2]
+            print el.userid + ',' + el.content + ',' + el.content_type + ',' + el.timestamp
