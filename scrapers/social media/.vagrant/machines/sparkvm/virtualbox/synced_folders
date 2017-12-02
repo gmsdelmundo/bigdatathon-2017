@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/victor/Desktop/Bigdatathon/bigdatathon-2017/scrapers/social media","disabled":false,"__vagrantfile":true}}}
-=======
 {"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/kv19971/bigdatathon/bigdatathon-2017/scrapers/social media","disabled":false,"__vagrantfile":true}}}
->>>>>>> e0c598a915e66dab9ada10fbc5e1fbfb7b9d6689
