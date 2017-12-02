@@ -1,9 +1,18 @@
 import argparse
 
 parser = argparse.ArgumentParser(description='Process tweets.')
-parser.add_argument('input_file_path', metavar='input_file_path',
+
+parser.add_argument('item_name', metavar='item_name',
+                    type=str, nargs=1,
+                    help='the item name')
+
+parser.add_argument('tweet_file_path', metavar='tweet_file_path',
                     type=str, nargs=1,
                     help='the file path of the tweets')
+
+parser.add_argument('item_file_path', metavar='item_file_path',
+                    type=str, nargs=1,
+                    help='the file path of the items')
 
 parser.add_argument('--debug', '-d',dest='debug',
                     action='store_true', default=False,
@@ -32,17 +41,27 @@ class Twitter:
         self.like_count = like_count
         self.timestamp = timestamp
 
-with open(args.input_file_path[0]) as json_data:
-    data = json.load(json_data)
+with open(args.tweet_file_path[0]) as tweet_json:
+    tweet_data = json.load(tweet_json)
 
-entries = [Twitter(tweet['user'], tweet['text'], tweet['retweets'], tweet['replies'], tweet['likes'], tweet['timestamp']) for tweet in data]
+entries = [Twitter(tweet['user'], tweet['text'], tweet['retweets'], tweet['replies'], tweet['likes'], tweet['timestamp']) for tweet in tweet_data]
 
 if args.num_entries > -1:
     entries = entries[:args.num_entries]
 
+item_file_name = args.item_file_path[0]
+item_file = open(item_file_name, 'r')
+itemid = ''
+
+for line in item_file:
+    if re.search(r'name:(.*?),', line).group(1) == args.item_name[0]:
+        itemid = re.search(r'id:(.*?),', line).group(1)
+        break
+
 class Processed:
-    def __init__(self, userid, content, content_type, timestamp, source):
+    def __init__(self, userid, productid, content, content_type, timestamp, source):
         self.userid = userid
+        self.productid = productid
         self.content = content
         self.content_type = content_type
         self.timestamp = timestamp
@@ -55,9 +74,9 @@ for entry in entries:
         url = "https://twitter.com/" + entry.user
         f = urllib.urlopen(url)
         page = f.read()
-        bios.append(Processed(entry.user, re.search('<p class=\"ProfileHeaderCard-bio u-dir\" dir=\"ltr\">(.*)</p>', page).group(1), 'bio', entry.timestamp, 'twitter'))
+        bios.append(Processed(entry.user, itemid, re.search('<p class=\"ProfileHeaderCard-bio u-dir\" dir=\"ltr\">(.*)</p>', page).group(1), 'bio', entry.timestamp, 'twitter'))
     except:
-        bios.append(Processed(entry.user, '', 'bio', entry.timestamp, 'twitter'))
+        bios.append(Processed(entry.user, itemid, '', 'bio', entry.timestamp, 'twitter'))
 
 # Tweets
 tweets = []
@@ -65,10 +84,10 @@ retweet_counts = []
 reply_counts = []
 like_counts = []
 for entry in entries:
-    tweets.append(Processed(entry.user, entry.tweet, 'tweet', entry.timestamp, 'twitter'))
-    retweet_counts.append(Processed(entry.user, entry.retweet_count, 'retweet count', entry.timestamp, 'twitter'))
-    reply_counts.append(Processed(entry.user, entry.reply_count, 'reply count', entry.timestamp, 'twitter'))
-    like_counts.append(Processed(entry.user, entry.like_count, 'like count', entry.timestamp, 'twitter'))
+    tweets.append(Processed(entry.user, itemid, entry.tweet, 'tweet', entry.timestamp, 'twitter'))
+    retweet_counts.append(Processed(entry.user, itemid, entry.retweet_count, 'retweet count', entry.timestamp, 'twitter'))
+    reply_counts.append(Processed(entry.user, itemid, entry.reply_count, 'reply count', entry.timestamp, 'twitter'))
+    like_counts.append(Processed(entry.user, itemid, entry.like_count, 'like count', entry.timestamp, 'twitter'))
 
 if args.debug:
     print 'Bios'
@@ -96,7 +115,8 @@ if args.debug:
         print like_count
     print '\n'
 
-import sys  
+import string
+import sys
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -110,4 +130,4 @@ else:
         print 'Outputting to file'
     for arr in arrs:
         for el in arr:
-            print el.userid + ',' + el.content + ',' + el.content_type + ',' + el.timestamp + ',' + el.source
+            print '"' + el.userid + '","' + el.productid + '","' + ''.join(l for l in el.content if l not in string.punctuation) + '","' + el.content_type + '","' + el.timestamp + '","' + el.source + '"'

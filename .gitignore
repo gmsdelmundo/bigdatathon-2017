@@ -8,3 +8,4 @@ share/
 include/
 .ipynb_checkpoints
 *.log
+*.swp
