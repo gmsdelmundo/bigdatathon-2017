@@ -1,2 +1,1 @@
-# bigdatathon-2017
-Fashion Viz
+# BigDatathon 2017: Fashion Viz
