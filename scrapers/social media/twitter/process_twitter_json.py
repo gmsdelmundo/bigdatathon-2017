@@ -53,9 +53,10 @@ item_file_name = args.item_file_path[0]
 item_file = open(item_file_name, 'r')
 itemid = ''
 
+print 'hue' + args.item_name[0]
 for line in item_file:
     if re.search(r'name:(.*?),', line).group(1) == args.item_name[0]:
-        itemid = re.search(r'id:(.*?),', line).group(1)
+	itemid = re.search(r'id:(.*?),', line).group(1)
         break
 
 class Processed:
@@ -116,11 +117,12 @@ if args.debug:
     print '\n'
 
 import string
+'''
 import sys
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
-
+'''
 arrs = [bios, tweets, retweet_counts, reply_counts, like_counts]
 if not args.output_data:
     if args.debug:
@@ -130,4 +132,4 @@ else:
         print 'Outputting to file'
     for arr in arrs:
         for el in arr:
-            print '"' + el.userid + '","' + el.productid + '","' + ''.join(l for l in el.content if l not in string.punctuation).strip('\n') + '","' + el.content_type + '","' + el.timestamp + '","' + el.source + '"'
+            print '"' + el.userid + '","' + el.productid + '","' + ''.join(l for l in el.content.encode('ascii', 'ignore') if l not in string.punctuation).strip('\n') + '","' + el.content_type + '","' + el.timestamp + '","' + el.source + '"'
