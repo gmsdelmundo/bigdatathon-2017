@@ -8,6 +8,7 @@ def threadWorker(category, filename, writefilename):
     #itemname = "SALVATORE FERRAGAMO weave knit scarf"
     with open(filename, "r") as fl:
         itemlist = fl.read().split("\n")
+    itemlist = itemlist[1:]
     finalitemlist = []
     for itemname in itemlist:
         listlink = "https://www.farfetch.com/hk/shopping/"+category+"/search/items.aspx?q="+itemname+"&ffref=lp_srs"
@@ -21,14 +22,14 @@ def threadWorker(category, filename, writefilename):
         try:
             #get them attributes
             brand = str(resultbody.xpath("//div[@class='detail-product pt10-sm pt10-xs']//a[@itemprop='brand']")[0].text)
-            price = str(resultbody.xpath("//div[@class='detail-product pt10-sm pt10-xs']//div[@class='pdp-price']//span[@class='listing-price js-price']")[0].text)
-            description = str(resultbody.xpath("//div[@class='accordion accordion-xl product-detail baseline col12 alpha omega mb20']//p[@itemprop='description']")[0].text.strip())
+            price = str(resultbody.xpath("//div[@class='detail-product pt10-sm pt10-xs']//div[@class='pdp-price']//span[@class='listing-price js-price']")[0].text).replace(",", "")
+            description = str(resultbody.xpath("//div[@class='accordion accordion-xl product-detail baseline col12 alpha omega mb20']//p[@itemprop='description']")[0].text.strip()).replace(", "," ")
             color = str(resultbody.xpath("//div[@class='accordion accordion-xl product-detail baseline col12 alpha omega mb20']//span[@itemprop='color']")[0].text.strip())
             styleid = str(resultbody.xpath("//div[@class='accordion accordion-xl product-detail baseline col12 alpha omega mb20']//p[@class='designer-style-id']/span")[0].text)
             prodid = str(resultbody.xpath("//div[@class='accordion accordion-xl product-detail baseline col12 alpha omega mb20']//p[@class='item-id']/span[@itemprop='sku']")[0].text)
             imglink = str(resultbody.xpath("//div[@class='sliderProductModule']//img[@class='noscriptImg__slide']/@src")[0])
             #designer-style-id
-            finalitemlist.append(("id:"+prodid, "daddy:"+filename,"name:"+itemname, "brand:"+brand, "price:"+price, "description:"+description, "color:"+color, "styleid:"+styleid, "imglink:"+imglink))
+            finalitemlist.append(("id:"+prodid, "daddy:"+filename,"name:"+itemname, "brand:"+brand, "price:"+price, "description:"+description, "color:"+color, "style:"+styleid, "imglink:"+imglink))
             print("Done with ", (prodid, brand, price, description, color, styleid, imglink))
         except:
             print("error")
@@ -44,12 +45,12 @@ cfwtuples = [
 
 """
 cfwtuples = [
-    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout2.csv"),
-    ("women", "data/luxurybagscsv.csv", "luxurybagsout2.csv"),
-    ("men", "data/malefashioncsv.csv", "malefashionout2.csv"),
-    ("women", "data/femalefashioncsv.csv", "femalefashionout2.csv"),
-    ("men", "data/accessoriescsv.csv", "accessoriesmenout2.csv"),
-    ("women", "data/accessoriescsv.csv", "accessorieswomenout2.csv")
+    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout3.csv"),
+    ("women", "data/luxurybagscsv.csv", "luxurybagsout3.csv"),
+    ("men", "data/malefashioncsv.csv", "malefashionout3.csv"),
+    ("women", "data/femalefashioncsv.csv", "femalefashionout3.csv"),
+    ("men", "data/accessoriescsv.csv", "accessoriesmenout3.csv"),
+    ("women", "data/accessoriescsv.csv", "accessorieswomenout3.csv")
 ]
 
 #threading.Thread(target=threadWorker, kwargs=cfwtuples[0]).start()
