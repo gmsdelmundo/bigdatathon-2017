@@ -1,7 +1,7 @@
 from lxml import html
 import requests
-import threading
-
+#import threading
+from multiprocessing import Process
 #(prodid, brand, price, description, color, styleid, img)
 
 def threadWorker(category, filename, writefilename):
@@ -44,10 +44,10 @@ cfwtuples = [
 
 """
 cfwtuples = [
-    {"category": "kids", "filename":"data/kidsfashioncsv.csv", "writefilename":"kidsfashionout.csv"},
-    {"category":"women", "filename":"data/luxurybagscsv.csv", "writefilename":"luxurybagsout.csv"},
-    {"category": "men", "filename": "data/accessoriescsv.csv", "writefilename": "accessoriesmenout.csv"},
-    {"category": "women", "filename": "data/accessoriescsv.csv", "writefilename": "accessorieswomenout.csv"}
+    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout.csv"),
+    ("women", "data/luxurybagscsv.csv", "luxurybagsout.csv")
+#    {"category": "men", "filename": "data/accessoriescsv.csv", "writefilename": "accessoriesmenout.csv"},
+#    {"category": "women", "filename": "data/accessoriescsv.csv", "writefilename": "accessorieswomenout.csv"}
 ]
 
 #threading.Thread(target=threadWorker, kwargs=cfwtuples[0]).start()
@@ -55,7 +55,7 @@ cfwtuples = [
 
 for t in cfwtuples:
     print("Started thread!!!!")
-    threading.Thread(target=threadWorker, kwargs=t).start()
+    Process(target=threadWorker, args=t).start()
 
 
 
