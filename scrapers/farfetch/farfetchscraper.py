@@ -34,7 +34,7 @@ def threadWorker(category, filename, writefilename):
             print("error")
             pass
     with open(writefilename, "w+") as wf:
-        wf.write("\n".join(["%s,%s,%s,%s,%s,%s" % x for x in finalitemlist]))
+        wf.write("\n".join([",".join(x) for x in finalitemlist]))
 
 """
 cfwtuples = [
@@ -44,8 +44,10 @@ cfwtuples = [
 
 """
 cfwtuples = [
-#    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout.csv"),
-#    ("women", "data/luxurybagscsv.csv", "luxurybagsout.csv")
+    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout.csv"),
+    ("women", "data/luxurybagscsv.csv", "luxurybagsout.csv"),
+    ("men", "data/malefashioncsv.csv", "malefashionout.csv"),
+    ("women", "data/femalefashioncsv.csv", "femalefashionout.csv"),
     ("men", "data/accessoriescsv.csv", "accessoriesmenout.csv"),
     ("women", "data/accessoriescsv.csv", "accessorieswomenout.csv")
 ]
