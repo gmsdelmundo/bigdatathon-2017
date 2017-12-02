@@ -6,3 +6,5 @@ pip-selfcheck.json
 selenium/
 share/
 include/
+.ipynb_checkpoints
+*.log
