@@ -9,11 +9,11 @@ parser.add_argument('item_name', metavar='item_name',
 parser.add_argument('tweet_file_path', metavar='tweet_file_path',
                     type=str, nargs=1,
                     help='the file path of the tweets')
-
+'''
 parser.add_argument('item_file_path', metavar='item_file_path',
                     type=str, nargs=1,
                     help='the file path of the items')
-
+'''
 parser.add_argument('--debug', '-d',dest='debug',
                     action='store_true', default=False,
                     help='show debug logs (default: hide debug logs)')
@@ -31,6 +31,10 @@ args = parser.parse_args()
 import json
 import re
 import urllib
+import sys
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
 class Twitter:
     def __init__(self, user, tweet, retweet_count, reply_count, like_count, timestamp):
@@ -48,15 +52,19 @@ entries = [Twitter(tweet['user'], tweet['text'], tweet['retweets'], tweet['repli
 
 if args.num_entries > -1:
     entries = entries[:args.num_entries]
-
+'''
 item_file_name = args.item_file_path[0]
 item_file = open(item_file_name, 'r')
 itemid = ''
 
 for line in item_file:
     if re.search(r'name:(.*?),', line).group(1) == args.item_name[0]:
-        itemid = re.search(r'id:(.*?),', line).group(1)
+	itemid = re.search(r'id:(.*?),', line).group(1)
         break
+'''
+
+import hashlib
+itemid = hashlib.md5(args.item_name[0].encode()).hexdigest()
 
 class Processed:
     def __init__(self, userid, productid, content, content_type, timestamp, source):
@@ -116,11 +124,6 @@ if args.debug:
     print '\n'
 
 import string
-import sys
-
-reload(sys)  
-sys.setdefaultencoding('utf8')
-
 arrs = [bios, tweets, retweet_counts, reply_counts, like_counts]
 if not args.output_data:
     if args.debug:
@@ -130,4 +133,8 @@ else:
         print 'Outputting to file'
     for arr in arrs:
         for el in arr:
-            print '"' + el.userid + '","' + el.productid + '","' + ''.join(l for l in el.content if l not in string.punctuation) + '","' + el.content_type + '","' + el.timestamp + '","' + el.source + '"'
+            better_content = re.sub(r"http\S+", '', el.content)
+            better_content = re.sub(r"pic.twitter\S+", '', better_content)
+            better_content = re.sub('<[^<]+?>', '', better_content)
+            better_content = re.sub('<[^<]+? ', '', better_content)
+	    print '"' + el.userid + '","' + el.productid + '","' + ''.join(l for l in better_content if l not in string.punctuation).strip('\n') + '","' + el.content_type + '","' + el.timestamp + '","' + el.source + '"'
