@@ -16,7 +16,7 @@ for csv in ../data/*.csv; do
     while read line; do
         echo "Scraping $line"
         twitterscraper "$line" --limit 5 --output ../temp.json
-	python process_twitter_json.py "$line" ../temp.json ../kv-data --output >> ../processed_tweets.csv
+	python ../process_twitter_json.py "$line" ../temp.json --output >> ../processed_tweets.csv
         rm ../temp.json
     done < $csv
 done
