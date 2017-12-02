@@ -44,10 +44,10 @@ cfwtuples = [
 
 """
 cfwtuples = [
-    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout.csv"),
-    ("women", "data/luxurybagscsv.csv", "luxurybagsout.csv")
-#    {"category": "men", "filename": "data/accessoriescsv.csv", "writefilename": "accessoriesmenout.csv"},
-#    {"category": "women", "filename": "data/accessoriescsv.csv", "writefilename": "accessorieswomenout.csv"}
+#    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout.csv"),
+#    ("women", "data/luxurybagscsv.csv", "luxurybagsout.csv")
+    ("men", "data/accessoriescsv.csv", "accessoriesmenout.csv"),
+    ("women", "data/accessoriescsv.csv", "accessorieswomenout.csv")
 ]
 
 #threading.Thread(target=threadWorker, kwargs=cfwtuples[0]).start()
