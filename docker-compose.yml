@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  scraper:
+    image: scraper
+    container_name: scraper
+    volumes:
+      - .:/code
+    working_dir: /code
+    ports:
+      - 8888:8888
+      - 8000:8000
+    command: /bin/bash
