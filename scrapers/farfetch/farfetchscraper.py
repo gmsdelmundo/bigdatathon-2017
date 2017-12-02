@@ -28,7 +28,7 @@ def threadWorker(category, filename, writefilename):
             prodid = str(resultbody.xpath("//div[@class='accordion accordion-xl product-detail baseline col12 alpha omega mb20']//p[@class='item-id']/span[@itemprop='sku']")[0].text)
             imglink = str(resultbody.xpath("//div[@class='sliderProductModule']//img[@class='noscriptImg__slide']/@src")[0])
             #designer-style-id
-            finalitemlist.append((prodid, brand, price, description, color, styleid, imglink))
+            finalitemlist.append(("id:"+prodid, "daddy:"+filename,"name:"+itemname, "brand:"+brand, "price:"+price, "description:"+description, "color:"+color, "styleid:"+styleid, "imglink:"+imglink))
             print("Done with ", (prodid, brand, price, description, color, styleid, imglink))
         except:
             print("error")
@@ -44,12 +44,12 @@ cfwtuples = [
 
 """
 cfwtuples = [
-    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout.csv"),
-    ("women", "data/luxurybagscsv.csv", "luxurybagsout.csv"),
-    ("men", "data/malefashioncsv.csv", "malefashionout.csv"),
-    ("women", "data/femalefashioncsv.csv", "femalefashionout.csv"),
-    ("men", "data/accessoriescsv.csv", "accessoriesmenout.csv"),
-    ("women", "data/accessoriescsv.csv", "accessorieswomenout.csv")
+    ("kids", "data/kidsfashioncsv.csv", "kidsfashionout2.csv"),
+    ("women", "data/luxurybagscsv.csv", "luxurybagsout2.csv"),
+    ("men", "data/malefashioncsv.csv", "malefashionout2.csv"),
+    ("women", "data/femalefashioncsv.csv", "femalefashionout2.csv"),
+    ("men", "data/accessoriescsv.csv", "accessoriesmenout2.csv"),
+    ("women", "data/accessoriescsv.csv", "accessorieswomenout2.csv")
 ]
 
 #threading.Thread(target=threadWorker, kwargs=cfwtuples[0]).start()
