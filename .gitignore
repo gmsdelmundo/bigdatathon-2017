@@ -2,3 +2,9 @@
 /lib
 /.idea
 pip-selfcheck.json
+.vscode
+selenium/
+share/
+include/
+.ipynb_checkpoints
+*.log

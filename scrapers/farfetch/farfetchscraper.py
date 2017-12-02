@@ -36,12 +36,26 @@ def threadWorker(category, filename, writefilename):
     with open(writefilename, "w+") as wf:
         wf.write("\n".join(["%s,%s,%s,%s,%s,%s" % x for x in finalitemlist]))
 
+"""
 cfwtuples = [
     {"category": "men", "filename":"data/malefashioncsv.csv", "writefilename":"malefashionout.csv"},
     {"category":"women", "filename":"data/femalefashioncsv.csv", "writefilename":"femalefashionout.csv"}
 ]
 
-threading.Thread(target=threadWorker, kwargs=cfwtuples[0]).start()
-threading.Thread(target=threadWorker, kwargs=cfwtuples[1]).start()
+"""
+cfwtuples = [
+    {"category": "kids", "filename":"data/kidsfashioncsv.csv", "writefilename":"kidsfashionout.csv"},
+    {"category":"women", "filename":"data/luxurybagscsv.csv", "writefilename":"luxurybagsout.csv"},
+    {"category": "men", "filename": "data/accessoriescsv.csv", "writefilename": "accessoriesmenout.csv"},
+    {"category": "women", "filename": "data/accessoriescsv.csv", "writefilename": "accessorieswomenout.csv"}
+]
+
+#threading.Thread(target=threadWorker, kwargs=cfwtuples[0]).start()
+#threading.Thread(target=threadWorker, kwargs=cfwtuples[1]).start()
+
+for t in cfwtuples:
+    print("Started thread!!!!")
+    threading.Thread(target=threadWorker, kwargs=t).start()
+
 
 
