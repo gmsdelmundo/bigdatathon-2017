@@ -41,11 +41,12 @@ if args.num_entries > -1:
     entries = entries[:args.num_entries]
 
 class Processed:
-    def __init__(self, userid, content, content_type, timestamp):
+    def __init__(self, userid, content, content_type, timestamp, source):
         self.userid = userid
         self.content = content
         self.content_type = content_type
         self.timestamp = timestamp
+        self.source = source
 
 # Bios
 bios = []
@@ -54,9 +55,9 @@ for entry in entries:
         url = "https://twitter.com/" + entry.user
         f = urllib.urlopen(url)
         page = f.read()
-        bios.append(Processed(entry.user, re.search('<p class=\"ProfileHeaderCard-bio u-dir\" dir=\"ltr\">(.*)</p>', page).group(1), 'bio', entry.timestamp))
+        bios.append(Processed(entry.user, re.search('<p class=\"ProfileHeaderCard-bio u-dir\" dir=\"ltr\">(.*)</p>', page).group(1), 'bio', entry.timestamp, 'twitter'))
     except:
-        bios.append(Processed(entry.user, '', 'bio', entry.timestamp))
+        bios.append(Processed(entry.user, '', 'bio', entry.timestamp, 'twitter'))
 
 # Tweets
 tweets = []
@@ -64,10 +65,10 @@ retweet_counts = []
 reply_counts = []
 like_counts = []
 for entry in entries:
-    tweets.append(Processed(entry.user, entry.tweet, 'tweet', entry.timestamp))
-    retweet_counts.append(Processed(entry.user, entry.retweet_count, 'retweet count', entry.timestamp))
-    reply_counts.append(Processed(entry.user, entry.reply_count, 'reply count', entry.timestamp))
-    like_counts.append(Processed(entry.user, entry.like_count, 'like count', entry.timestamp))
+    tweets.append(Processed(entry.user, entry.tweet, 'tweet', entry.timestamp, 'twitter'))
+    retweet_counts.append(Processed(entry.user, entry.retweet_count, 'retweet count', entry.timestamp, 'twitter'))
+    reply_counts.append(Processed(entry.user, entry.reply_count, 'reply count', entry.timestamp, 'twitter'))
+    like_counts.append(Processed(entry.user, entry.like_count, 'like count', entry.timestamp, 'twitter'))
 
 if args.debug:
     print 'Bios'
@@ -109,4 +110,4 @@ else:
         print 'Outputting to file'
     for arr in arrs:
         for el in arr:
-            print el.userid + ',' + el.content + ',' + el.content_type + ',' + el.timestamp
+            print el.userid + ',' + el.content + ',' + el.content_type + ',' + el.timestamp + ',' + el.source
