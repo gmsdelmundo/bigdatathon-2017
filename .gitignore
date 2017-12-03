@@ -1,6 +1,6 @@
-/bin
-/lib
-/.idea
+bin/
+lib/
+.idea
 pip-selfcheck.json
 .vscode
 selenium/
@@ -12,3 +12,4 @@ include/
 node_modules/
 __pycache__/
 scrapers/*.json
+*.xlsx#
