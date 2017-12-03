@@ -12,18 +12,17 @@ all_content = [[w.replace("\"", "") for w in t.split(",")] for t in all_content]
 tweets = [(t[1], t[2]) for t in all_content if len(t) > 4 and t[3].lower() =="tweet"]
 bios = [t[2] for t in all_content if len(t) > 4 and t[3].lower() == "bio"]
 
-tweetsGrouped = [(k, len([x for x,y in g])) for k,g in groupby(tweets, key=itemgetter(0))]
-tweetsGrouped.sort(key=itemgetter(1), reverse=True)
-print(len(tweetsGrouped))
 tweetvectorizer = TfidfVectorizer(stop_words="english")
-tweetvectorizer.fit_transform(tweets)
+tweetvectorizer.fit_transform([t[1] for t in tweets])
 #joblib.dump(tweetvectorizer, "tweetvector")
-
-biovectorizer = TfidfVectorizer(stop_words="english")
-biovectorizer.fit_transform(tweets)
+#
+# biovectorizer = TfidfVectorizer(stop_words="english")
+# biovectorizer.fit_transform(tweets)
 #joblib.dump(biovectorizer, "biovector")
-
-vecs = tweetvectorizer.transform(tweets)
+vecs = [(t[0], tweetvectorizer.transform([t[1]])[0]) for t in tweets]
+with open("twittervectorwritefile", "w+") as fw:
+    fw.write("\n".join("|".join([])))
+#vecs = tweetvectorizer.transform(tweets)
 #vecs = [numpy.asarray(v.T) for v in vecs]
 # dup_tuples = []
 # similarity_thresh = 0.95
