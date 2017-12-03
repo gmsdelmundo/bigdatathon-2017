@@ -20,16 +20,16 @@ def worker_main(queue):
 the_pool = multiprocessing.Pool(10, worker_main, (the_queue,))
 
 LINKS = [
-  "https://www.instagram.com/explore/tags/leopardprintcoat",
-  "https://www.instagram.com/explore/tags/reversiblepufferjacket",
-  "https://www.instagram.com/explore/tags/sneakermules",
-  "https://www.instagram.com/explore/tags/weaveknitscarf",
-  "https://www.instagram.com/explore/tags/coldshouldercrepemididress",
-  "https://www.instagram.com/explore/tags/crepeminidress",
-  "https://www.instagram.com/explore/tags/cliponaviatorsunglasses",
-  "https://www.instagram.com/explore/tags/tripletotebag",
-  "https://www.instagram.com/explore/tags/autumnprinthoodie",
-  "https://www.instagram.com/explore/tags/classicdenimjacket"
+  "https://www.instagram.com/explore/tags/rippedtrousers",
+  "https://www.instagram.com/explore/tags/studdedshoulderbag",
+  "https://www.instagram.com/explore/tags/shoulderbag",
+  "https://www.instagram.com/explore/tags/largeleathertote",
+  "https://www.instagram.com/explore/tags/leathershoulderbag",
+  "https://www.instagram.com/explore/tags/continentalwallet",
+  "https://www.instagram.com/explore/tags/velvettote",
+  "https://www.instagram.com/explore/tags/leathershoulderbag",
+  "https://www.instagram.com/explore/tags/plaquewalletonchain",
+  "https://www.instagram.com/explore/tags/leather-trimmedquiltedvelvetshoulderbag"
 ]
 
 for L in LINKS:
