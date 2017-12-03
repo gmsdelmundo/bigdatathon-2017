@@ -6,9 +6,9 @@ pip-selfcheck.json
 selenium/
 share/
 include/
-.ipynb_checkpoints
+.ipynb_checkpoints/
 *.log
 *.swp
 node_modules/
 __pycache__/
-*.json!package.json!package-lock.json
+scrapers/*.json
