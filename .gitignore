@@ -9,3 +9,6 @@ include/
 .ipynb_checkpoints
 *.log
 *.swp
+node_modules/
+__pycache__/
+*.json!package.json!package-lock.json
