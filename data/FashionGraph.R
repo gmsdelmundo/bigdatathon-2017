@@ -1,0 +1,74 @@
+
+#-------------------------- Gaussian Model --------------------------------#
+setwd("/Users/BlackHawk/Desktop/TheBigD/")
+file = read.csv("", header = FALSE, stringsAsFactors = FALSE)
+preserve_col_names = file[5:5,2:ncol(file)]
+file = file[6:nrow(file),2:ncol(file)]
+colnames(file) = preserve_col_names
+#specify rows to keep
+keep_rows = c(5,6,8,9,10,14,26,36,37,seq(39,43), seq(44,51), 53,54,55,56,
+              seq(58,61),63,64,66,67,68,71,72,seq(74,78),80,81,
+              83,84,88,91,93,96)
+
+rownames(file) = seq(1,nrow(file))  #normalize row numbers
+#remove headers and keep the rows with *same level of subdivisions*
+# Also, we set stringAsFactors as FALSE so we can more easily manipulate the column containing industry names
+sub_file = data.frame(file[keep_rows,], stringsAsFactors = FALSE)
+#clarify 2 "durable goods" rows and "general government"
+sub_file[8:9,1] = c("Wholesale Trade Durable goods", "Wholesale Trade Nondurable goods")
+sub_file[c(47,49),1] = c("Federal General Gov", "State and Local General Gov")
+colnames(sub_file) = preserve_col_names
+#Get the first column and make that the row names
+names_of_rows = sub_file[,1:1]  #name the rows after industries
+#remove the column containing industry names and make numeric in order to perform computations
+sub_file = apply(sub_file[,2:ncol(sub_file)], 2, as.numeric)
+rownames(sub_file) = names_of_rows
+# rows are years and columns are
+
+year_x_industry = t(sub_file)   # Data is now short and wide -> high dimensional and potentially sparse
+
+# Now we have the data formated the way we want!
+
+library(GGMselect) 
+# You can read the package details here:
+# https://cran.r-project.org/web/packages/GGMselect/vignettes/Notice.pdf
+# Notice on pg. 4, "The Lasso-And family GbLA derives from the estimation procedure proposed by 
+# Meinshausen and Bühlmann". That's exactly what we want!
+# One line of code...
+graph_computation = selectFast(year_x_industry, K=2, family = "LA")
+
+# G is a matrix of the graph in graph_computation
+# We need to create a graph from the matrix, and can treat matrix like adjecency mat
+library(igraph)
+graph_to_plot = graph_from_adjacency_matrix(graph_computation$LA$G, mode = "undirected")
+
+#name the vertecies, V(graph) will return all the vertecies for graph
+temp = seq(1,length(names_of_rows))
+name_dictionary = data.frame(temp, names_of_rows)
+V(graph_to_plot)$name <- temp
+plot.igraph(graph_to_plot)
+View(name_dictionary)
+
+#--------------------------------------------------------------------------#
+
+# ---------- Other Graphing Libraries/APIs ---------#
+
+# -- Network D3
+#### Must first install dependencies, run the following:
+#install.packages("magrittr", dependencies = TRUE)
+#install.packages("igraph", dependencies = TRUE)
+#install.packages("networkD3", dependencies = TRUE)
+
+#library(networkD3)      
+#simpleNetwork(as.data.frame(graph_computation$C01.LA$G))
+
+# -- network
+# library(network)
+# Gr <- simulateGraph(p = ncol(favorable_opinion_matrix), eta = 0.11)  #generate random graph
+# gV <- network(Gr$G)      # gV is now matrix of the graph generated
+# a <- plot(gV, usearrows = FALSE)      #plot the random graph
+# plot_me <- network(graph_computation$C01.LA$G)
+# plot(plot_me, coord = a, usearrows = FALSE)  #plot the graph, using coord = a gives form
+
+# -- gmm
+#library(gmm)
