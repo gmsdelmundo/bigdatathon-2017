@@ -107,12 +107,33 @@ def get_brand_dictionary(my_brand):
 	brand_vector[brands_dictionary[my_brand]] = 1
 	return brand_vector
 
+def getSimilarityScores(similarityVectors):
+	similarity_matrix = np.zeros(shape=(len(similarityVectors), len(similarityVectors)))
+	print("\nCalculating similarity scores...\n\n")
+	for i, vec1 in enumerate(similarityVectors):
+		for j, vec2 in enumerate(similarityVectors):
+			dot = np.dot(vec1, vec2)
+			score = dot/(np.linalg.norm(vec1)*np.linalg.norm(vec2))
+			similarity_matrix[i][j] = score	
+	return similarity_matrix	
 
 brands_dictionary = {}
 urls = get_urls()
 result_logits = get_features_vectors(urls)
 write_feature_vectors(result_logits)
 result_logits = add_feature_vector_ends(result_logits)
+print("\n\nPrinting vectors for testing...\n\n")
+for vec in result_logits:
+	print(vec)
+print("\nDone printing vectors...\n\n")
+cosine_similarity_matrix = getSimilarityScores(result_logits)
+
+print("\n\n\n\nRESULT:\n" + str(cosine_similarity_matrix))
+
+
+
+
+
 
 
 
