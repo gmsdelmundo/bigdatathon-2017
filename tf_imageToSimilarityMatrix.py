@@ -75,9 +75,47 @@ def get_urls():
 			urls.append(url)
 	return urls
 
+def add_feature_vector_ends(feature_vectors):
+	print("\n\nIn feature vector function.\n")
+	append_me = []
+	with open('/code/scrapers/social media/twitter/kv-data', 'r') as file_with_image_urls:
+		rows = csv.reader(file_with_image_urls)
+		for i, vector in enumerate(feature_vectors):
+			print("Vector #: " + str(i) + " is: " + str(vector) + " and row is: " + str(rows[i]))
+# want to append brand, price (normalized) 
+			append_me.append(get_brand_dictionary(rows[i][3][7:]))
+			append_me.append(double(rows[i][4][9:])/57000)	#divide by the max price to keep values between 1 and 0
+			feature_vectors.append(append_me)
+	return feature_vectors
+
+def get_brand_dictionary(my_brand):
+	print("\n\nIn get brand dictionary function\n")
+	if not brands_dictionary:	#if brand vector has not yet been created, make it
+		with open('/code/scrapers/social media/twitter/kv-data', 'r') as file_with_image_urls:
+			rows = csv.reader(file_with_image_urls)
+			i = 0
+			for row in rows:
+				brand_row = row[3]
+				brand = brand_row[7:]
+				if brand not in brands_dictionary:
+					brands_dictionary[brand] = i
+					i = i + 1
+			if(len(brands_dictionary) != i):
+				print("potential error in get_brand_dictionary")
+
+	brand_vector = [0]*len(brands_dictionary)
+	brand_vector[brands_dictionary[my_brand]] = 1
+	return brand_vector
+
+
+brands_dictionary = {}
 urls = get_urls()
 result_logits = get_features_vectors(urls)
 write_feature_vectors(result_logits)
+result_logits = add_feature_vector_ends(result_logits)
+
+
+
 
 # TODO: add feature basis
 # TODO: calculate similarity matrix
