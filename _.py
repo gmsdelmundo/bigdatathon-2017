@@ -79,8 +79,13 @@ def get_similarity_scores(df):
 # df.to_csv(output_file)
 
 df = pd.read_csv(input_file)
-df_drop = df.drop(['product_id', 'hash'], axis=1)
-result = get_similarity_scores(df_drop)
+# df_drop = df.drop(['product_id', 'hash'], axis=1)
+# result = get_similarity_scores(df_drop)
+# df_result = pd.DataFrame(result)
+# df_result.to_csv(output_file_result)
 
-df_result = pd.DataFrame(result)
-df_result.to_csv(output_file_result)
+df2 = pd.read_csv("fml2.csv")
+df2 = df2.loc[:, ~df2.columns.str.contains('^Unnamed')]
+df2["hash"] = df["hash"]
+df2.set_index("hash")
+df2.to_csv("fml3.csv")
