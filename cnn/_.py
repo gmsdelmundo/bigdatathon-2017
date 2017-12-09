@@ -7,10 +7,10 @@ import pandas as pd
 import csv
 
 data_dir = '/Users/tusharjain/code/bigdatathon-2017/data/far_fetch_product_data_deduplicated.csv'
-file_dir = '/Users/tusharjain/code/bigdatathon-2017/models/research/slim/'
+file_dir = '/Users/tusharjain/code/models/research/slim/'
 output_file = 'pre_dot.csv'
-input_file = '/Users/tusharjain/code/bigdatathon-2017/pre_dot.csv'
-output_file_result = 'fml2.csv'
+input_file = '/Users/tusharjain/code/bigdatathon-2017/cnn/data/pre_dot.csv'
+output_file_result = 'data/fml.csv'
 
 def make_brand_dict():
 	with open(data_dir, 'r') as file_with_image_urls:
@@ -86,6 +86,6 @@ df_result = pd.DataFrame(result)
 hashes = df["hash"].tolist()
 df_result.columns = hashes
 df_result["hash"] = hashes
-df_result.set_index("hash")
+df_result = df_result.set_index("hash")
 
 df_result.to_csv(output_file_result)
