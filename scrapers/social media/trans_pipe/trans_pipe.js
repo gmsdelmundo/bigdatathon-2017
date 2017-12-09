@@ -5,17 +5,18 @@ let tweet = files.readFileSync("tweets_only.csv", "utf8")
 let tweetsarr = tweet.split("\n")
 let tweetsarrmod = [];
 for(let i = 0; i < tweetsarr.length; i++){
-	tmod = tweetsarr[i].split(",");
+	tmod = tweetsarr[i].split(/(,(?=\S))/).filter(function (s){
+			return s!=",";		
+		});
 	tweetsarrmod.push(tmod)
 }
 
 
 translatedtweets = [];
 for(let i = 0; i < tweetsarrmod.length; i++){
-	var r = tweetsarrmod[i];
 	translate(tweetsarrmod[i][2], {to: 'en'}).then(res => {
-		    r[2] = res.text;
-		    console.log(r.join(","));
+		    tweetsarrmod[i][2] = res.text;
+		    console.log(tweetsarrmod[i].join(","));
 		    
 		    //=> I speak English 
 		    //=> nl 
