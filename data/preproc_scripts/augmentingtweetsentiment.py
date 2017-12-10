@@ -6,7 +6,7 @@ import re
 with open("product_cosine_similarity_scores.csv", "r") as fl:
 	mat = fl.read().split("\n")
 
-prod_ord = mat[0]
+prod_ord = mat[0].split(",")
 mat = mat[1:]
 similarity_dict = {}
 for rt in mat:
@@ -19,16 +19,12 @@ def getNSimilar(prodid, n):
 		return None
 	vec = similarity_dict[prodid]
 	dtmp = []
-	mag = np.linalg.norm(vec)
-	for k, v in similarity_dict.items():
-		if k == prodid:
+	for i in range(len(vec)):
+		if prodid == prod_ord[i]:
 			continue
-		dp = np.dot(vec, v) / (mag * np.linalg.norm(v))
-		print(dp)
-		dtmp.append([k, dp])
-	dtmp_sorted = sorted(dtmp, key=operator.itemgetter(1), reverse=True)
-	items = [t[0] for t in dtmp_sorted[:n]]
-	return items
+		dtmp.append((prod_ord[i], vec[i]))
+	dtmp_sorted = sorted(dtmp, key=operator.itemgetter(1), reverse=True) 
+	return dtmp_sorted[:n]
 
 with open("translatedtweetssentiment.txt", "r") as fl:
 	tweets = fl.read().split("\n")
@@ -43,7 +39,8 @@ for i, t in enumerate(tweets):
 	if similar_items is None:
 		continue
 	for s in similar_items:
-		tweets_new.append([t[0], s, "", t[3], t[4]])
+		print(s[1])
+		tweets_new.append([t[0], s[0], "", str(float(t[3]) * s[1]), t[4]])
 
 with open("sentiment_augmented", "w+") as fw:
 	fw.write("\n".join([",".join(t) for t in tweets_new]))
