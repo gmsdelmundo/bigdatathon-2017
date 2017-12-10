@@ -2,7 +2,7 @@ library("softImpute")
 library("reshape2")
 library("Metrics")
 
-setwd("/Users/BlackHawk/Desktop/Fashion BigDatathon/data/") # Change this to the directory where your data is
+setwd("/Users/BlackHawk/Desktop/Fashion_BigDatathon/data/") # Change this to the directory where your data is
 ratings = read.csv("star1 (1).csv")
 ratings = as.matrix(ratings[,-1]) #take out the column with 
 
@@ -10,7 +10,7 @@ product_x_twitterbio = read.csv("twitterproduct_x_bio_matrix.txt")
 
 
 
-twittersentiment = read.csv("tweetssentiment.txt", header = FALSE) #raw data, list of sentiments
+twittersentiment = read.csv("tweets_sentiment_augmented.txt", header = FALSE) #raw data, list of sentiments
 colnames(twittersentiment) <- c("userid", "productid_hash", "tweet", 
                                 "sentiment_score", "value type")
 tw_rating = twittersentiment[,c("userid", "productid_hash", "sentiment_score")]
@@ -124,7 +124,7 @@ get_best_lambda <- function(data) {
 
 
 #--------------------------- Soft SVD -----------------------------#
-lambdas_and_errors = testing_lambda(1, rating_mat, user_ids_train, 
+lambdas_and_errors = testing_lambda(1, rating_mat, user_ids_train,
                                     product_ids_train, rating_test, matrix_rank, type = "soft")
 #get_actual_and_predicted: (lam, method, training, rn, cn, testing, mr)
 soft_lambda = get_best_lambda(lambdas_and_errors)[1]
@@ -136,6 +136,7 @@ Final_ranking_list = as.matrix(colSums(imputed)[1:50])
 
 setwd("/Users/BlackHawk/Desktop/") # Change this to the directory where your data is
 write.csv(Final_ranking_list, "Final_fashion_rankings.csv")
-    
+write.csv(imputed, "Imputed.csv")
+
     
     
