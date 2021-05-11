@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/MiG98789/bigdatathon-2017#readme",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.21"
   }
 }
